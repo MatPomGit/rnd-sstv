@@ -23,7 +23,7 @@ test('digital frame roundtrips across modem profiles including leading silence',
   const wave=encodeDigital(text,1,name,true,48000);
   const padded=new Float32Array(wave.length+4800);
   padded.set(wave,4800);
-  const got=decodeDigital(padded,48000,name);
+  let got; try {got=decodeDigital(padded,48000,name);}catch(e){throw Error(name+': '+e.message);}
   assert.equal(got.type,1,name);
   assert.deepEqual(got.data,text,name);
  }
