@@ -7,7 +7,7 @@ Program w Pythonie do konwersji obrazów PNG na analogowy sygnał SSTV Robot, za
 | Tryb | VIS | Obraz | Czas obrazu | Kolor |
 | --- | ---: | ---: | ---: | --- |
 | Robot12 | 0 | 160 × 120 | 12,00 s | YCbCr, chrominancja co drugą linię |
-| Robot24 | 4 | 320 × 120 | 24,00 s | YCbCr, Cr i Cb w każdej linii |
+| Robot24 | 4 | 160 × 120 | 24,00 s | YCbCr, Cr i Cb w każdej linii |
 | Robot36 | 8 | 320 × 240 | 36,00 s | YCbCr, chrominancja co drugą linię |
 | Robot B/W8 | 2 | 160 × 120 | 7,92 s | Monochromatyczny |
 
