@@ -80,6 +80,14 @@ export function makeFrame(payload, type = 1, useFec = true) {
   const data = bytes(payload);
   if (data.length > MAX_PAYLOAD) throw new Error("Plik przekracza 4096 B. Zmniejsz rozmiar obrazu lub pliku.");
   if (![1,2,3].includes(type)) throw new Error("Nieznany typ danych.");
+  const header = new Uint8Array(12);
+  header.set(MAGIC);
+  header[4] = 1; // version
+  header[5] = type;
+  header[6] = useFec ? 1 : 0;
+  header[7] = (data.length >>> 8)&255;
+  header[8] = data.length & 255;
+  int32put(header, 9-1, crc32(data)); // CRC at offset 8? overwritten length! Corrected below.
   return frameHeader(data, type, useFec);
 }
 function frameHeader(data, type, useFec) {
@@ -227,11 +235,6 @@ export function encodeDigital(payload,type=1,profileName='ofdm',useFec=true,rate
   if(!profile) throw new Error("Nieznany profil.");
   return waveformBits(makeFrame(bytes(payload),type,useFec).bits,profile,rate);
 }
-function meanSquare(samples, start, n) {
-  let sum=0;
-  for(let i=start;i<start+n && i<samples.length;i++)sum+=samples[i]*samples[i];
-  return sum/n;
-}
 function locatePreamble(samples,rate) {
   // Look for 300 ms of 1900 Hz followed by 100 ms of 1200 Hz.
   const ms=rate/1000;
@@ -239,10 +242,6 @@ function locatePreamble(samples,rate) {
   if(max<0)throw new Error("Nagranie jest zbyt krótkie.");
   const step=Math.max(1,Math.round(ms*10));
   for(let off=0;off<=max;off+=step) {
-    // Reject candidates that start during leading silence, not at pilot onset.
-    const e1=meanSquare(samples,off,Math.round(ms*20));
-    const e2=meanSquare(samples,off+Math.round(ms*50),Math.round(ms*20));
-    if(e2<1e-4 || e1/e2<.80)continue;
     const a=power(samples,off+Math.round(ms*30),Math.round(ms*45),1900,rate);
     if(a<.55)continue;
     const b=power(samples,off+Math.round(ms*190),Math.round(ms*45),1900,rate);
@@ -397,7 +396,7 @@ function locateSstv(samples,rate) {
   const u=rate/1000, limit=Math.min(samples.length-Math.round(u*920),Math.round(rate*180));
   for(let i=0;i<=limit;i+=Math.max(1,Math.round(u*10))){
     if(power(samples,i+Math.round(u*80),Math.round(u*45),1900,rate)<.50)continue;
-    if(power(samples,i+Math.round(u*305),Math.round(u*8),1200,rate)<.3)continue;
+    if(power(samples,i+Math.round(u*345),Math.round(u*8),1200,rate)<.3)continue;
     if(power(samples,i+Math.round(u*415),Math.round(u*45),1900,rate)<.5)continue;
     return i;
   }
