@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {MODES,PROFILES,crc32,fecEncode,fecDecode,makeFrame,parseFrameBits,
-        encodeDigital,decodeDigital,encodeSstv,toWav,fromWav} from '../mobile/codec.mjs';
+        encodeDigital,decodeDigital,encodeSstv,decodeSstv,toWav,fromWav} from '../mobile/codec.mjs';
 
 test('CRC32 standard vector',()=>assert.equal(crc32(new TextEncoder().encode('123456789')),0xcbf43926));
 test('Hamming single-bit errors corrected',()=>{
@@ -45,4 +45,18 @@ test('all Robot SSTV modes generate duration and WAV file',async()=>{
   assert.equal(wav.rate,48000);
   assert.equal(wav.samples.length,audio.length);
  }
+});
+
+test('SSTV receiver decodes generated B/W8 with leading silence',()=>{
+  const mode=MODES.bw8,rgba=new Uint8ClampedArray(mode.width*mode.height*4);
+  for(let i=0;i<mode.width*mode.height;i++){
+    rgba[4*i]=178;rgba[4*i+1]=178;rgba[4*i+2]=178;rgba[4*i+3]=255;
+  }
+  const sound=encodeSstv(rgba,mode.width,mode.height,'bw8');
+  const audio=new Float32Array(sound.length+4800);
+  audio.set(sound,4800);
+  const rx=decodeSstv(audio,48000,'bw8');
+  assert.equal(rx.width,160);assert.equal(rx.height,120);
+  assert.equal(rx.pixels.length,160*120*4);
+  assert.ok(rx.pixels[(60*160+80)*4]>45);
 });

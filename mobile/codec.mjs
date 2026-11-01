@@ -397,7 +397,7 @@ function locateSstv(samples,rate) {
   const u=rate/1000, limit=Math.min(samples.length-Math.round(u*920),Math.round(rate*180));
   for(let i=0;i<=limit;i+=Math.max(1,Math.round(u*10))){
     if(power(samples,i+Math.round(u*80),Math.round(u*45),1900,rate)<.50)continue;
-    if(power(samples,i+Math.round(u*305),Math.round(u*8),1200,rate)<.3)continue;
+    if(power(samples,i+Math.round(u*301),Math.round(u*8),1200,rate)<.3)continue;
     if(power(samples,i+Math.round(u*415),Math.round(u*45),1900,rate)<.5)continue;
     return i;
   }
