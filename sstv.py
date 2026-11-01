@@ -44,7 +44,7 @@ class Mode:
 
 MODES = {
     'robot12': Mode('Robot Color 12', 160, 120, 0, 7, 0, 60, 3, 0, 30, 'alternating'),
-    'robot24': Mode('Robot Color 24', 320, 120, 4, 9, 3, 88, 4.5, 1.5, 44, 'both'),
+    'robot24': Mode('Robot Color 24', 160, 120, 4, 9, 3, 88, 4.5, 1.5, 44, 'both'),
     'robot36': Mode('Robot Color 36', 320, 240, 8, 9, 3, 88, 4.5, 1.5, 44, 'alternating'),
     'bw8': Mode('Robot B/W 8', 160, 120, 2, 10, 0, 56),
 }
