@@ -80,14 +80,6 @@ export function makeFrame(payload, type = 1, useFec = true) {
   const data = bytes(payload);
   if (data.length > MAX_PAYLOAD) throw new Error("Plik przekracza 4096 B. Zmniejsz rozmiar obrazu lub pliku.");
   if (![1,2,3].includes(type)) throw new Error("Nieznany typ danych.");
-  const header = new Uint8Array(12);
-  header.set(MAGIC);
-  header[4] = 1; // version
-  header[5] = type;
-  header[6] = useFec ? 1 : 0;
-  header[7] = (data.length >>> 8)&255;
-  header[8] = data.length & 255;
-  int32put(header, 9-1, crc32(data)); // CRC at offset 8? overwritten length! Corrected below.
   return frameHeader(data, type, useFec);
 }
 function frameHeader(data, type, useFec) {
@@ -396,7 +388,7 @@ function locateSstv(samples,rate) {
   const u=rate/1000, limit=Math.min(samples.length-Math.round(u*920),Math.round(rate*180));
   for(let i=0;i<=limit;i+=Math.max(1,Math.round(u*10))){
     if(power(samples,i+Math.round(u*80),Math.round(u*45),1900,rate)<.50)continue;
-    if(power(samples,i+Math.round(u*345),Math.round(u*8),1200,rate)<.3)continue;
+    if(power(samples,i+Math.round(u*305),Math.round(u*8),1200,rate)<.3)continue;
     if(power(samples,i+Math.round(u*415),Math.round(u*45),1900,rate)<.5)continue;
     return i;
   }
