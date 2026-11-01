@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111b2a"><meta name="description" content="SSTV i modem akustyczny dla Androida">
+<link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Acoustic Lab — SSTV i modem</title></head>
+<body><header><div class="brand">ACOUSTIC LAB <small>rnd-sstv · mobile 0.2.0</small></div>
+<h1>Informacja przez dźwięk</h1><p>Nadawaj i odbieraj dane przez głośnik i mikrofon telefonu. Bez serwera i konta.</p></header>
+<main><nav class="tabs" aria-label="Rodzaj transmisji"><button id="tab-digital" class="active" type="button">Modem cyfrowy</button><button id="tab-sstv" type="button">SSTV Robot</button></nav>
+<section class="panel"><h2>1. Nadawanie</h2>
+<div id="digital-settings"><label for="profile">Modulacja</label><select id="profile">
+<option value="ofdm">OFDM / DBPSK-12</option><option value="mfsk">MFSK-4</option><option value="fsk">AFSK 1200/2200</option>
+<option value="chirp">Chirp / CSS (eksperyment)</option><option value="ultra">MFSK 17–18,5 kHz (eksperyment)</option></select>
+<div class="radio-row"><label><input type="radio" name="payload" value="text" checked> Tekst</label>
+<label><input type="radio" name="payload" value="image"> Zdjęcie</label><label><input type="radio" name="payload" value="file"> Plik</label></div>
+<div id="digital-text-row"><label for="message">Wiadomość</label><textarea id="message" rows="3">Test modemu akustycznego</textarea></div>
+<div id="digital-file-row" hidden><label for="digital-file">Wybierz plik (maks. 4 KiB)</label><input id="digital-file" type="file">
+<p class="hint">Zdjęcia automatycznie zmniejszamy i kompresujemy do JPEG.</p></div>
+<label class="check"><input id="fec" type="checkbox" checked> Korekcja błędów Hamming(7,4) i CRC32</label></div>
+<div id="sstv-settings" hidden><label for="sstv-mode">Tryb</label><select id="sstv-mode">
+<option value="robot12">Robot12 · kolor · 160 × 120</option><option value="robot24">Robot24 · kolor · 320 × 120</option>
+<option value="robot36" selected>Robot36 · kolor · 320 × 240</option><option value="bw8">B/W8 · 160 × 120</option></select>
+<label for="sstv-file">Plik obrazu</label><input id="sstv-file" type="file" accept="image/*"></div>
+<canvas id="preview" hidden aria-label="Podgląd obrazu"></canvas><p id="status" aria-live="polite" class="hint"></p>
+<div class="actions"><button id="generate" class="primary">Generuj WAV</button><button id="play" disabled>Odtwórz</button>
+<button id="stop-play" disabled>Zatrzymaj</button></div>
+<audio id="audio-preview" controls preload="none" hidden></audio><a id="wav-link" class="download" hidden>Pobierz WAV</a>
+</section><section class="panel"><h2>2. Odbieranie</h2>
+<p class="hint">Wybierz ten sam tryb co na nadajniku. Nagrywaj przed odtworzeniem na drugim telefonie, zatrzymaj po emisji.</p>
+<div class="actions"><button id="record" class="primary">Nagrywaj mikrofon</button><button id="stop-record" disabled>Zatrzymaj i dekoduj</button></div>
+<label for="wav-input">Lub wczytaj nagranie WAV</label><input id="wav-input" type="file" accept=".wav,audio/wav">
+<progress id="record-level" max="100" value="0" aria-label="Poziom nagrania"></progress>
+<div id="received" hidden><h3>Odebrane dane</h3><p id="rx-info"></p><pre id="rx-text" hidden></pre>
+<canvas id="rx-image" hidden></canvas><a id="received-link" class="download" hidden>Pobierz odebrany plik</a></div></section>
+<section class="notice"><strong>Wskazówki sprzętowe</strong><p>Ustaw umiarkowaną głośność i umieść dwa telefony w odległości 10–50 cm.
+Rozmowy, procesory szumu i systemowe filtry audio mogą zakłócać transmisję. 17–18,5 kHz działa tylko na niektórych urządzeniach.</p>
+<p>Uprawnienie mikrofonu wymaga HTTPS. Nie blokuj ekranu podczas nagrywania. Dane nie opuszczają telefonu przez sieć.</p></section></main>
+<footer>Źródło: <a href="https://github.com/MatPomGit/rnd-sstv">MatPomGit/rnd-sstv</a></footer>
+<script type="module" src="app.mjs"></script></body></html>
