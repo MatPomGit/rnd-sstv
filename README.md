@@ -1,5 +1,11 @@
 # rnd-sstv
 
+## Aplikacja na Android (PWA)
+
+**Mobilna aplikacja akustyczna**: [instrukcja](docs/mobile.md) · [kod PWA](mobile/) · [instalacja z GitHub Pages](https://matpomgit.github.io/rnd-sstv/).
+
+Obejmuje nadawanie/odbiór WAV i mikrofon, SSTV Robot, cyfrowy FSK/MFSK/OFDM/chirp, tekst, małe pliki oraz cyfrowe JPEG z CRC32 i Hamming(7,4). Eksperymentalna łączność akustyczna przez **dwa telefony**, bez serwera. Mikrofon wymaga HTTPS; Pages trzeba włączyć w ustawieniach repozytorium. Własny MFSK nie jest kompatybilny z ggwave, ale osobny tryb **ggwave** wykorzystuje kompatybilny port JavaScript z licencją MIT.
+
 Program w Pythonie do konwersji obrazów PNG na analogowy sygnał SSTV Robot, zapisywany jako WAV 48 kHz / 16-bit / mono. Udostępnia GUI (Tkinter) i CLI.
 
 ## Obsługiwane tryby
