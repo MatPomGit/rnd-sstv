@@ -14,6 +14,7 @@ Aplikacja webowa PWA `mobile/index.html` działa w Chrome na Androidzie, także 
 - SSTV: Robot12, Robot24, Robot36, B/W8. Kodowanie i eksperymentalne dekodowanie.
 - FSK: 1200/2200 Hz.
 - MFSK-4: 1000, 1600, 2200, 2800 Hz.
+- **ggwave** Audible Fast/Normal i eksperymentalny Ultrasound: zgodne z protokołem ggwave, implementacja [ggwave-js](https://github.com/themonnie/ggwave-js) na licencji MIT (lokalnie w mobile/vendor), z korekcją Reed-Solomon. Tryb ten przesyła tekst do 128 B; obrazy/pliki wysyłaj przez własny OFDM.
 - OFDM/DBPSK: 12 podnośnych 900–4200 Hz. Niezależny protokół eksperymentalny.
 - Chirp/CSS: modulacja binarna liniowym przebiegiem częstotliwości, eksperymentalna.
 - MFSK 17–18,5 kHz: tryb eksperymentalny, może nie działać przez filtry hardware'u.
@@ -22,7 +23,7 @@ Aplikacja webowa PWA `mobile/index.html` działa w Chrome na Androidzie, także 
 - Nagłówek 1900 Hz 300 ms + 1200 Hz 100 ms. Ramka RDS1 z CRC32 i opcjonalną korekcją Hamming(7,4). Nagłówek zawsze jest chroniony FEC.
 - Szczegóły ramki: magic(4), wersja(1), typ(1), FEC(1), rozmiar(2), CRC32(4), payload.
 
-Własny MFSK **nie jest interoperacyjny z ggwave**. Własny OFDM nie jest zgodny z zewnętrznymi modemami. Dobór tych protokołów ma charakter laboratoryjny.
+Własny MFSK **nie jest interoperacyjny z ggwave**. Osobna pozycja `ggwave` jest zgodna z interoperacyjnym protokołem. Plik `mobile/vendor/LICENSE.ggwave-js` zawiera pełny tekst licencji portu. Własny OFDM nie jest zgodny z zewnętrznymi modemami. Dobór tych protokołów ma charakter laboratoryjny.
 
 ## Sprzęt i bezpieczeństwo
 

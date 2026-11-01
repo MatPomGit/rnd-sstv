@@ -13,7 +13,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/mobile.test.mjs
+      - run: node --test tests/mobile.test.mjs tests/ggwave.test.mjs
+      - run: node --check mobile/ggwave-adapter.mjs
       - run: node --check mobile/codec.mjs
       - run: node --check mobile/app.mjs
       - run: node --check mobile/mic-worklet.js

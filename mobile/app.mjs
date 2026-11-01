@@ -1,5 +1,6 @@
 import {RATE,MAX_PAYLOAD,MODES,PROFILES,estimateDuration,encodeDigital,decodeDigital,
   encodeSstv,decodeSstv,toWav,fromWav} from './codec.mjs';
+import {GGWAVE_PROFILE,encodeGgwave,decodeGgwave} from './ggwave-adapter.mjs';
 
 const $=id=>document.getElementById(id);
 const utf8=new TextEncoder(),decoder=new TextDecoder();
@@ -31,6 +32,7 @@ function estimate(){
   if(section==='digital'){
     const n=utf8.encode($('message').value).length;
     const profile=$('profile').value;
+    if(GGWAVE_PROFILE[profile]){message(GGWAVE_PROFILE[profile].label+' · maks. 128 B UTF-8 (tylko tekst)');return;}
     message(PROFILES[profile].label+
       (payloadKind==='text'?' · '+n+' B, około '+estimateDuration(n,profile,$('fec').checked).toFixed(1)+' s':' · maks. 4096 B'));
   }else{
@@ -95,7 +97,11 @@ async function generate(){
   try{
     if(section==='digital'){
       const {data,type}=await readData();
-      audioData=encodeDigital(data,type,$('profile').value,$('fec').checked);
+      const selected=$('profile').value;
+      if(GGWAVE_PROFILE[selected]){
+        if(type!==1)throw Error('ggwave obsługuje tutaj tylko tekst. Do plików i zdjęć wybierz OFDM.');
+        audioData=encodeGgwave(data,selected,RATE);
+      }else audioData=encodeDigital(data,type,selected,$('fec').checked);
     }else{
       const selected=$('sstv-file').files[0];
       const image=await imageFrom(selected);
@@ -140,7 +146,8 @@ async function decoded(samples,rate){
   await new Promise(resolve=>setTimeout(resolve,50));
   try{
     if(section==='digital'){
-      const data=decodeDigital(samples,rate,$('profile').value);
+      const selected=$('profile').value;
+      const data=GGWAVE_PROFILE[selected]?decodeGgwave(samples,rate):decodeDigital(samples,rate,selected);
       $('rx-info').textContent='CRC32 OK · '+data.data.length+' B · poprawione błędy FEC: '+data.corrected;
       if(data.type===1){
         $('rx-text').textContent=decoder.decode(data.data);$('rx-text').hidden=false;

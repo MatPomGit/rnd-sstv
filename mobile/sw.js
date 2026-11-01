@@ -1,5 +1,5 @@
-const CACHE='acoustic-lab-v2';
-const FILES=['./','./index.html','./app.mjs','./codec.mjs','./mic-worklet.js','./style.css','./icon.svg','./manifest.webmanifest'];
+const CACHE='acoustic-lab-v3';
+const FILES=['./','./index.html','./app.mjs','./codec.mjs','./ggwave-adapter.mjs','./vendor/ggwave-js.min.js','./vendor/LICENSE.ggwave-js','./mic-worklet.js','./style.css','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;
