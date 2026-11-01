@@ -47,6 +47,9 @@ class EncoderTests(unittest.TestCase):
                     expected = 1100 if (mode.vis >> bit) & 1 else 1300
                     self.assertAlmostEqual(freq_ms(640+30*bit), expected, delta=20)
 
+    def test_robot24_dimensions(self):
+        self.assertEqual((MODES['robot24'].width, MODES['robot24'].height), (160, 120))
+
     def test_png_alpha_and_letterboxing(self):
         Image.new('RGBA', (20, 20), (255, 0, 0, 0)).save(self.source)
         output = prepare_image(self.source, MODES['robot36'])
